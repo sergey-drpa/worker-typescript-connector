@@ -1,8 +1,6 @@
-Call worker as simple typed class methods. And make DOM events available from worker.
+Call web worker as simple typed class methods. And make DOM events available for worker.
 
-How to use:
-
-Requirements:
+**Requirements:**
 
 ```npm install worker-typescript-connector --save```
 
@@ -10,9 +8,9 @@ and worker-loader to start worker:
 
 ```npm install worker-loader --save-dev```
 
+**How to use:**
 
-
-For example we have `ExampleClass` - this is the Class that we want to run inside worker, and it implements our example `ExampleInterface`
+For example we have `ExampleClass` - this is the Class that we want to run inside worker, and it implements example `ExampleInterface`
 
 example-class.ts:
 ```
@@ -28,7 +26,7 @@ export class ExampleClass implements ExampleInterface {
   }
   
   async myMethodWithSharedData(someArgument: string, offscreenCanvas: OffscreenCanvas): Promise<string> {
-    return "some result string";
+    return `some result string ${someArgument}`;
   }
 }
 ```
@@ -74,7 +72,7 @@ export class ExampleWorkerClient extends WorkerClientBase implements ExampleInte
 ```
 and worker.ts:
 ```
- import { startWorkerInterfaceFor } from 'worker-typescript-connector';
+ import { startWorkerInterfaceFor } from 'worker-typescript-connector/dist/src/lib/worker-base';
  import { ExampleClass } from './example-class';
  
  const exampleClass = new ExampleClass();
@@ -82,4 +80,23 @@ and worker.ts:
  startWorkerInterfaceFor(exampleClass);
 ```
 
-Just it, now, when you will call `ExampleWorkerClient` methods it will be called inside worker and return results back.
+
+**Just it**, now, when call `ExampleWorkerClient` methods it will be called inside worker and return results back:
+
+
+```
+...
+
+async function test() {
+    const exampleWorkerClient = new ExampleWorkerClient();
+    
+    exampleWorkerClient.myMethodOne(1);
+
+    exampleWorkerClient.myMethodTwo('string...', true);
+
+    console.log(await exampleWorkerClient.myMethodWithSharedData('test', canvas)); // Will print "some result string test"
+}
+
+...
+
+```
