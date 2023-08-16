@@ -99,4 +99,7 @@ async function test() {
 
 ...
 
+
+NPM: [npmjs.com/package/worker-typescript-connector](https://www.npmjs.com/package/worker-typescript-connector)
+
 ```
